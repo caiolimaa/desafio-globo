@@ -1,0 +1,50 @@
+<app-payment-status-shell activeStep="payment">
+  <main
+    class="checkout-state-transition mx-auto flex min-h-96 max-w-6xl items-center justify-center px-5 py-12 sm:px-8"
+  >
+    <section
+      class="w-full max-w-xl rounded-xl border border-nexo-border bg-white p-8 text-center shadow-nexo-card sm:p-10"
+      aria-live="polite"
+      aria-busy="true"
+    >
+      <div class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-nexo-primary-soft">
+        <span
+          class="h-8 w-8 animate-spin rounded-full border-4 border-nexo-spinner border-t-nexo-primary"
+          aria-hidden="true"
+        ></span>
+      </div>
+      <h1 class="mt-2 text-2xl font-bold tracking-tight text-nexo-heading sm:text-3xl">
+        {{ copy.processing.title }}
+      </h1>
+      <p class="mx-auto mt-3 max-w-md text-base leading-6 text-nexo-body">
+        {{ copy.processing.description }}
+      </p>
+
+      <app-payment-result-details
+        class="mt-7 block text-left"
+        [product]="product()"
+        [method]="request()?.method ?? 'pix'"
+        [amount]="request()?.amount ?? product().price"
+        [cardBrand]="request()?.cardBrand"
+        [cardLastFour]="request()?.cardLastFour"
+      />
+
+      <div
+        class="mt-5 flex items-start gap-3 rounded-lg border border-nexo-notice-border bg-nexo-notice-bg p-4 text-left text-sm text-nexo-primary"
+        role="status"
+        aria-live="polite"
+      >
+        <span
+          class="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full border-2 border-current"
+          aria-hidden="true"
+        >
+          <ng-icon name="phosphorExclamationMarkBold" size="18" class="h-4 w-4" />
+        </span>
+        <div>
+          <p class="font-bold">{{ copy.processing.waitTitle }}</p>
+          <p class="mt-1 leading-5">{{ copy.processing.waitDescription }}</p>
+        </div>
+      </div>
+    </section>
+  </main>
+</app-payment-status-shell>

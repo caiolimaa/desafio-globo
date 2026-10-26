@@ -1,0 +1,268 @@
+@use 'tailwindcss';
+
+@theme {
+  --color-nexo-page: #f7f8fc;
+  --color-nexo-surface: #ffffff;
+  --color-nexo-ink: #22233a;
+  --color-nexo-brand: #2c2d43;
+  --color-nexo-heading: #25263c;
+  --color-nexo-deep: #292a40;
+  --color-nexo-heading-soft: #36374e;
+  --color-nexo-text: #414258;
+  --color-nexo-body: #66677b;
+  --color-nexo-muted: #85869a;
+  --color-nexo-subtle: #9a9baa;
+  --color-nexo-primary: #5b50d6;
+  --color-nexo-primary-strong: #4b41c0;
+  --color-nexo-primary-light: #7169df;
+  --color-nexo-primary-muted: #7169c9;
+  --color-nexo-primary-soft: #f0efff;
+  --color-nexo-primary-pale: #f2f1ff;
+  --color-nexo-primary-hover: #f4f2ff;
+  --color-nexo-primary-outline: #8d87e8;
+  --color-nexo-primary-icon: #dfddff;
+  --color-nexo-border: #e7e8f0;
+  --color-nexo-border-soft: #e8e9f0;
+  --color-nexo-border-alt: #ececf2;
+  --color-nexo-border-muted: #dfe0e9;
+  --color-nexo-divider: #e4e5ed;
+  --color-nexo-line: #e5e6ef;
+  --color-nexo-header-border: #e9eaf2;
+  --color-nexo-step-muted-bg: #ebecf3;
+  --color-nexo-step-muted: #a1a2b3;
+  --color-nexo-step-text: #4a4b62;
+  --color-nexo-footer: #9798a7;
+  --color-nexo-footer-link: #7169c9;
+  --color-nexo-icon-muted: #a2a3b2;
+  --color-nexo-icon-soft: #9a9ba9;
+  --color-nexo-success: #27a77b;
+  --color-nexo-success-strong: #16845b;
+  --color-nexo-success-bg: #e7f8f0;
+  --color-nexo-error: #c74451;
+  --color-nexo-error-icon: #d95762;
+  --color-nexo-error-border: #ffd9dc;
+  --color-nexo-error-bg: #fff0f1;
+  --color-nexo-spinner: #dcd9ff;
+  --color-nexo-notice-border: #dedcff;
+  --color-nexo-notice-bg: #f5f3ff;
+  --color-nexo-result-bg: #f8f9fc;
+  --color-nexo-print-divider: #f0f0f4;
+  --color-nexo-field-label: #334155;
+  --color-nexo-field-muted: #f4f4f8;
+  --color-nexo-protected-text: #62637b;
+  --color-nexo-option-muted: #a0a1af;
+  --color-nexo-field-text: #34354c;
+  --color-nexo-field-border: #e2e3eb;
+  --color-nexo-field-focus: #8179e2;
+  --color-nexo-field-invalid: #dc6b78;
+  --color-nexo-field-invalid-bg: #fff4f5;
+  --color-nexo-field-error: #be123c;
+  --color-nexo-disabled: #c8c9d3;
+  --color-nexo-disabled-text: #686a79;
+  --shadow-nexo-card: 0 4px 18px rgb(42 43 73 / 4.5%);
+  --shadow-nexo-selected: 0 0 0 1px #8d87e8;
+}
+
+:root {
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+  color: var(--color-nexo-ink);
+  background: var(--color-nexo-page);
+}
+
+body {
+  @apply m-0 min-w-80 bg-nexo-page;
+}
+* {
+  @apply box-border;
+}
+
+.checkout-state-transition {
+  display: block;
+  animation: nexo-state-enter 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes nexo-state-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .checkout-state-transition {
+    animation: none;
+  }
+}
+
+button:not(:disabled) {
+  cursor: pointer;
+}
+
+.field-label {
+  @apply mb-2 block text-base font-semibold text-nexo-field-label;
+}
+.field-input {
+  @apply w-full rounded-lg border border-nexo-field-border bg-nexo-surface px-4 py-3 pl-10 text-base text-nexo-field-text outline-none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+.field-input:focus {
+  @apply border-nexo-field-focus;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-nexo-primary) 12%, transparent);
+}
+.field-input-invalid,
+.field-input-invalid:focus {
+  @apply border-nexo-field-invalid bg-nexo-field-invalid-bg;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-nexo-field-invalid) 12%, transparent);
+}
+.cvv-input {
+  @apply pr-10;
+}
+.field-error {
+  @apply mt-1 text-sm text-nexo-field-error;
+}
+.field-help {
+  @apply mt-1 text-sm leading-5 text-nexo-muted;
+}
+
+/* Keep the compact reference layout readable across checkout states. */
+
+@media print {
+  body {
+    background: var(--color-nexo-surface) !important;
+  }
+
+  app-checkout-shell > header,
+  app-checkout-shell > footer {
+    display: none !important;
+  }
+
+  app-checkout-shell > div {
+    min-height: 0 !important;
+    background: var(--color-nexo-surface) !important;
+  }
+
+  app-checkout-shell main {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+}
+.primary-button {
+  @apply rounded-lg bg-nexo-primary px-4 py-3 text-sm font-bold text-nexo-surface;
+  transition:
+    background 0.2s,
+    transform 0.2s;
+}
+.primary-button:hover:not(:disabled) {
+  background: var(--color-nexo-primary-strong);
+  transform: translateY(-1px);
+}
+.primary-button:disabled {
+  background: var(--color-nexo-disabled);
+  color: var(--color-nexo-disabled-text);
+  cursor: not-allowed;
+  opacity: 0.55;
+  transform: none;
+}
+.secondary-button {
+  @apply rounded-lg border border-nexo-border-muted px-4 py-3 text-sm font-bold text-nexo-field-label;
+  transition: background 0.2s;
+}
+.secondary-button:hover {
+  background: var(--color-nexo-page);
+}
+.eyebrow {
+  @apply text-xs font-extrabold uppercase tracking-widest text-nexo-primary;
+}
+
+.receipt-print-header,
+.receipt-print-footer,
+.print-receipt {
+  @apply hidden;
+}
+
+@media print {
+  .receipt-print-header {
+    @apply mb-6 flex items-center gap-3 border-b border-nexo-border pb-4 text-left;
+  }
+
+  .receipt-print-header img,
+  .print-receipt-heading img {
+    @apply h-8 w-8;
+  }
+
+  .receipt-print-header strong,
+  .receipt-print-header span,
+  .print-receipt-heading strong,
+  .print-receipt-heading span {
+    display: block;
+  }
+
+  .receipt-print-header strong,
+  .print-receipt-heading strong {
+    @apply text-base text-nexo-heading;
+  }
+
+  .receipt-print-header span,
+  .print-receipt-heading span {
+    @apply mt-0.5 text-xs text-nexo-body;
+  }
+
+  .receipt-card {
+    @apply hidden;
+  }
+
+  .print-receipt {
+    @apply mx-auto block w-full max-w-2xl rounded-xl border border-nexo-border-muted p-8 text-nexo-heading;
+    font-family: Arial, sans-serif;
+  }
+
+  .print-receipt-heading {
+    @apply flex items-center gap-3;
+  }
+
+  .print-receipt-heading strong {
+    @apply text-lg;
+  }
+
+  .print-receipt-heading span {
+    @apply text-xs;
+  }
+
+  .print-receipt-rule {
+    @apply my-6 h-px bg-nexo-border;
+  }
+
+  .print-receipt dl {
+    @apply m-0;
+  }
+
+  .print-receipt dl > div {
+    @apply flex justify-between gap-6 border-b border-nexo-print-divider py-3.5 text-sm;
+  }
+
+  .print-receipt dt {
+    @apply text-nexo-body;
+  }
+
+  .print-receipt dd {
+    @apply m-0 text-right font-bold;
+  }
+
+  .print-receipt-total {
+    @apply border-b-0 pt-5 text-base;
+  }
+}

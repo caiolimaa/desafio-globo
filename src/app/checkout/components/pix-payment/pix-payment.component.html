@@ -1,0 +1,73 @@
+<div class="space-y-5">
+  <div class="text-left">
+    <p class="text-base font-semibold text-nexo-text">{{ copy.pix.heading }}</p>
+    <p class="mt-2 max-w-lg text-sm leading-5 text-nexo-muted">
+      {{ copy.pix.description }}
+    </p>
+  </div>
+
+  <div class="flex justify-center">
+    <div
+      class="flex h-44 w-44 items-center justify-center rounded-2xl border border-nexo-border-muted bg-white p-4"
+    >
+      <canvas
+        #qrCanvas
+        class="h-full w-full"
+        [attr.aria-label]="copy.pix.qrLabel"
+        role="img"
+      ></canvas>
+    </div>
+  </div>
+
+  <div class="relative">
+    <code
+      class="block break-all rounded-lg border border-nexo-border bg-white p-3 pr-14 text-sm leading-5 text-nexo-body"
+      >{{ code }}</code
+    >
+    <button
+      class="absolute right-2 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-lg border border-nexo-notice-border bg-white text-nexo-primary shadow-sm transition hover:bg-nexo-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nexo-primary"
+      type="button"
+      [attr.aria-label]="copy.pix.copyCode"
+      [title]="copy.pix.copyCode"
+      (click)="copyCode()"
+    >
+      <span class="text-nexo-primary">
+        <ng-icon name="phosphorCopyBold" size="20" class="h-5 w-5" aria-hidden="true" />
+      </span>
+    </button>
+  </div>
+
+  @if (copied) {
+    <p class="text-center text-sm text-nexo-success" role="status">{{ copy.pix.copied }}</p>
+  }
+
+  <div class="flex flex-col-reverse gap-3 sm:flex-row">
+    <button
+      class="secondary-button flex flex-1 items-center justify-center gap-2 border-nexo-primary-icon bg-white text-nexo-primary hover:bg-nexo-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nexo-primary"
+      type="button"
+      [attr.aria-label]="copy.pix.copyCode"
+      (click)="copyCode()"
+    >
+      <span class="text-nexo-primary">
+        <ng-icon name="phosphorCopyBold" size="20" class="h-5 w-5" aria-hidden="true" />
+      </span>
+      {{ copy.pix.copyCode }}
+    </button>
+    <button
+      class="primary-button flex flex-1 items-center justify-center gap-2"
+      type="button"
+      [disabled]="processing()"
+      (click)="complete.emit({ method: 'pix', amount: amount() })"
+    >
+      @if (processing()) {
+        {{ copy.pix.processing }}
+      } @else {
+        <ng-icon name="phosphorArrowRightBold" size="20" class="h-5 w-5" aria-hidden="true" />
+        {{ copy.pix.complete }}
+      }
+    </button>
+  </div>
+  <p class="text-center text-sm text-nexo-subtle">
+    {{ copy.pix.simulated }}
+  </p>
+</div>

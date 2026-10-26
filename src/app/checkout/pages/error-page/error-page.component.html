@@ -1,0 +1,85 @@
+<app-payment-status-shell activeStep="payment">
+  <main
+    class="checkout-state-transition mx-auto flex max-w-6xl items-center justify-center px-5 py-10 sm:px-8 sm:py-14"
+  >
+    @if (error(); as paymentError) {
+      <section
+        class="w-full max-w-2xl rounded-xl border border-nexo-border bg-white p-8 text-center shadow-nexo-card sm:p-11"
+      >
+        <div
+          class="mx-auto grid h-14 w-14 place-items-center rounded-full bg-nexo-error-bg text-nexo-error-icon"
+          [attr.aria-label]="copy.error.notAuthorized"
+          role="img"
+        >
+          <ng-icon
+            name="phosphorExclamationMarkBold"
+            size="28"
+            class="h-7 w-7"
+            aria-hidden="true"
+          />
+        </div>
+        <h1 class="mt-6 text-3xl font-bold tracking-tight text-nexo-heading">
+          {{ copy.error.title }}
+        </h1>
+        <p class="mx-auto mt-2 max-w-md text-sm text-nexo-body">
+          {{ copy.error.subtitle }}
+        </p>
+
+        <div
+          class="mt-6 flex items-start gap-3 rounded-lg border border-nexo-error-border bg-nexo-error-bg p-4 text-left text-sm text-nexo-error"
+        >
+          <span
+            class="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full border-2 border-current"
+            aria-hidden="true"
+          >
+            <ng-icon name="phosphorExclamationMarkBold" size="18" class="h-4 w-4" />
+          </span>
+          <div>
+            <p class="font-bold">
+              {{
+                paymentError.code === 'DECLINED'
+                  ? copy.error.declinedTitle
+                  : copy.error.genericTitle
+              }}
+            </p>
+            <p class="mt-1 leading-5">
+              {{ paymentError.code === 'DECLINED' ? declinedCardMessage : paymentError.message }}
+            </p>
+          </div>
+        </div>
+
+        <app-payment-result-details
+          class="mt-6 block"
+          [product]="product()"
+          [orderId]="order()?.id ?? paymentError.orderId ?? 'AAAA-999A9'"
+          [method]="paymentError.method ?? 'pix'"
+          [amount]="paymentError.amount ?? product().price"
+          [cardBrand]="paymentError.cardBrand"
+          [cardLastFour]="paymentError.cardLastFour"
+        />
+
+        <div class="mt-6 grid gap-3 sm:grid-cols-2">
+          <button
+            class="primary-button flex min-h-12 items-center justify-center gap-2 whitespace-nowrap leading-none"
+            type="button"
+            (click)="retry()"
+          >
+            <ng-icon
+              name="phosphorArrowClockwiseBold"
+              size="16"
+              class="h-4 w-4 shrink-0"
+              aria-hidden="true"
+            />
+            {{ copy.error.retry }}
+          </button>
+          <button class="secondary-button" type="button" (click)="changeMethod()">
+            {{ copy.error.chooseMethod }}
+          </button>
+        </div>
+        <p class="mt-5 text-xs text-nexo-subtle">
+          {{ copy.error.errorCode }} {{ paymentError.code }}
+        </p>
+      </section>
+    }
+  </main>
+</app-payment-status-shell>

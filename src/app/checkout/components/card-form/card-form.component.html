@@ -1,0 +1,159 @@
+<form class="space-y-4" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <div>
+    <label class="field-label" for="card-number">{{ copy.card.numberLabel }}</label>
+    <div class="relative text-nexo-icon-muted">
+      <ng-icon
+        name="phosphorCreditCardBold"
+        size="16"
+        class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2"
+        aria-hidden="true"
+      />
+      <input
+        id="card-number"
+        class="field-input pl-10"
+        [class.field-input-invalid]="showError('number')"
+        formControlName="number"
+        inputmode="numeric"
+        autocomplete="cc-number"
+        [placeholder]="copy.card.numberPlaceholder"
+        maxlength="19"
+        aria-describedby="card-number-help"
+        [attr.aria-invalid]="showError('number')"
+        (input)="formatCardNumber($event)"
+      />
+    </div>
+    <p id="card-number-help" class="field-help">
+      {{ copy.card.numberHelp }}
+    </p>
+    @if (showError('number')) {
+      <p class="field-error" role="alert">
+        {{ copy.card.numberError }}
+      </p>
+    }
+  </div>
+  <div>
+    <label class="field-label" for="card-holder">{{ copy.card.holderLabel }}</label>
+    <div class="relative text-nexo-icon-muted">
+      <ng-icon
+        name="phosphorUserBold"
+        size="16"
+        class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2"
+        aria-hidden="true"
+      />
+      <input
+        id="card-holder"
+        class="field-input pl-10"
+        [class.field-input-invalid]="showError('holder')"
+        formControlName="holder"
+        autocomplete="cc-name"
+        aria-describedby="card-holder-help"
+        [attr.aria-invalid]="showError('holder')"
+        [placeholder]="copy.card.holderPlaceholder"
+      />
+    </div>
+    <p id="card-holder-help" class="field-help">
+      {{ copy.card.holderHelp }}
+    </p>
+    @if (showError('holder')) {
+      <p class="field-error" role="alert">{{ copy.card.holderError }}</p>
+    }
+  </div>
+  <div class="grid gap-4 sm:grid-cols-2">
+    <div>
+      <label class="field-label" for="card-expiration">{{ copy.card.expirationLabel }}</label>
+      <div class="relative text-nexo-icon-muted">
+        <ng-icon
+          name="phosphorCalendarBlankBold"
+          size="16"
+          class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2"
+          aria-hidden="true"
+        />
+        <input
+          id="card-expiration"
+          class="field-input pl-10"
+          [class.field-input-invalid]="showError('expiration')"
+          formControlName="expiration"
+          inputmode="numeric"
+          autocomplete="cc-exp"
+          [placeholder]="copy.card.expirationPlaceholder"
+          maxlength="5"
+          aria-describedby="card-expiration-help"
+          [attr.aria-invalid]="showError('expiration')"
+          (input)="formatExpiration($event)"
+        />
+      </div>
+      <p id="card-expiration-help" class="field-help">
+        {{ copy.card.expirationHelp }}
+      </p>
+      @if (showError('expiration')) {
+        <p class="field-error" role="alert">{{ copy.card.expirationError }}</p>
+      }
+    </div>
+    <div>
+      <label class="field-label" for="card-cvv">{{ copy.card.cvvLabel }}</label>
+      <div class="relative text-nexo-icon-muted">
+        <ng-icon
+          name="phosphorLockBold"
+          size="16"
+          class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2"
+          aria-hidden="true"
+        />
+        <input
+          id="card-cvv"
+          class="field-input cvv-input pl-10 pr-10"
+          [class.field-input-invalid]="showError('cvv')"
+          formControlName="cvv"
+          inputmode="numeric"
+          autocomplete="cc-csc"
+          [placeholder]="copy.card.cvvPlaceholder"
+          maxlength="4"
+          type="password"
+          aria-describedby="cvv-help"
+          [attr.aria-invalid]="showError('cvv')"
+          (input)="formatCvv($event)"
+        />
+        <button
+          class="group absolute right-2.5 top-1/2 grid h-6 w-6 -translate-y-1/2 place-items-center rounded-full text-xs font-bold text-nexo-icon-muted hover:bg-nexo-primary-soft hover:text-nexo-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nexo-primary"
+          type="button"
+          [attr.aria-label]="copy.card.cvvQuestion"
+          aria-describedby="cvv-help"
+          [title]="copy.card.cvvTooltip"
+        >
+          <ng-icon name="phosphorQuestion" size="24" class="h-6 w-6" aria-hidden="true" />
+          <span
+            class="pointer-events-none absolute bottom-full right-0 mb-2 w-52 rounded-md bg-nexo-deep p-2 text-left text-xs font-medium leading-4 text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
+            >{{ copy.card.cvvTooltip }}</span
+          >
+        </button>
+        <span id="cvv-help" class="sr-only">{{ copy.card.cvvTooltip }}</span>
+      </div>
+      <p class="field-help">
+        {{ copy.card.cvvHelp }}
+      </p>
+      @if (showError('cvv')) {
+        <p class="field-error" role="alert">{{ copy.card.cvvError }}</p>
+      }
+    </div>
+  </div>
+  @if (attempted() && form.valid) {
+    <p class="flex items-center gap-1.5 text-sm font-semibold text-nexo-success" role="status">
+      <ng-icon name="phosphorCheckBold" size="16" class="h-4 w-4 shrink-0" aria-hidden="true" />
+      {{ copy.card.validData }}
+    </p>
+  }
+  <button
+    class="primary-button flex w-full items-center justify-center gap-2"
+    type="submit"
+    [disabled]="processing() || form.invalid"
+  >
+    <ng-icon name="phosphorLockBold" size="16" class="h-4 w-4 shrink-0" aria-hidden="true" />
+    @if (processing()) {
+      <span class="animate-pulse">{{ copy.card.processing }}</span>
+    } @else {
+      {{ copy.card.submit }} {{ amount() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+    }
+  </button>
+  <p class="text-center text-sm leading-5 text-slate-500">
+    {{ copy.card.agreement }}
+  </p>
+</form>

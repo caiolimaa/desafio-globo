@@ -1,0 +1,49 @@
+<section class="result-details rounded-2xl bg-nexo-result-bg p-5 text-left sm:p-6">
+  <div class="flex items-center gap-3">
+    <div
+      class="grid h-11 w-11 shrink-0 grid-cols-2 gap-1 rounded-lg bg-nexo-primary-soft p-2.5"
+      aria-hidden="true"
+    >
+      <span class="rounded-sm bg-nexo-primary"></span
+      ><span class="rounded-sm bg-nexo-primary-light"></span
+      ><span class="rounded-sm bg-nexo-primary-light"></span
+      ><span class="rounded-sm bg-nexo-primary"></span>
+    </div>
+    <div class="min-w-0">
+      <h2 class="text-base font-bold text-nexo-heading-soft">{{ product().name }}</h2>
+      <p class="mt-0.5 text-sm text-nexo-body">{{ product().summary }}</p>
+    </div>
+  </div>
+  <div class="my-5 border-t border-nexo-divider"></div>
+  <dl class="space-y-4 text-sm">
+    @if (orderId()) {
+      <div class="flex items-center justify-between gap-4">
+        <dt class="text-nexo-body">{{ copy.result.order }}</dt>
+        <dd class="font-semibold tracking-wide text-nexo-heading-soft">{{ orderId() }}</dd>
+      </div>
+    }
+    <div class="flex items-center justify-between gap-4">
+      <dt class="text-nexo-body">{{ copy.result.payment }}</dt>
+      <dd class="text-right font-semibold text-nexo-heading-soft">
+        {{ methodLabel() }}
+        @if (cardLastFour()) {
+          - {{ cardBrand() }} - &bull;&bull;&bull;&bull; {{ cardLastFour() }}
+        }
+      </dd>
+    </div>
+    @if (showDate() && createdAt()) {
+      <div class="flex items-center justify-between gap-4">
+        <dt class="text-nexo-body">{{ copy.result.date }}</dt>
+        <dd class="font-semibold text-nexo-heading-soft">
+          {{ createdAt() | date: 'dd/MM/yyyy, HH:mm' }}
+        </dd>
+      </div>
+    }
+    <div class="flex items-center justify-between gap-4 border-t border-nexo-border-soft pt-4">
+      <dt class="font-bold text-nexo-heading-soft">{{ totalLabel() }}</dt>
+      <dd class="text-lg font-extrabold text-nexo-deep">
+        {{ amount() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+      </dd>
+    </div>
+  </dl>
+</section>

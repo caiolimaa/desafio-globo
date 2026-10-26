@@ -1,0 +1,117 @@
+<app-payment-status-shell activeStep="confirmation">
+  <main
+    class="checkout-state-transition mx-auto flex max-w-6xl items-center justify-center px-5 py-10 sm:px-8 sm:py-14"
+  >
+    @if (receipt(); as payment) {
+      <section
+        class="receipt-card w-full max-w-2xl rounded-xl border border-nexo-border bg-white p-7 text-center shadow-nexo-card sm:p-10"
+      >
+        <div class="receipt-print-header">
+          <img src="/logo.svg" [alt]="copy.brand.ariaLabel" />
+          <div>
+            <strong>{{ payment.product.name }}</strong>
+            <span>{{ copy.success.receiptTitle }}</span>
+          </div>
+        </div>
+
+        <div
+          class="mx-auto grid h-14 w-14 place-items-center rounded-full bg-nexo-success-bg text-nexo-success-strong"
+          [attr.aria-label]="copy.success.approvedLabel"
+          role="img"
+        >
+          <ng-icon name="phosphorCheckCircleBold" size="28" class="h-7 w-7" aria-hidden="true" />
+        </div>
+
+        <h1 class="mt-6 text-3xl font-bold tracking-tight text-nexo-heading sm:text-4xl">
+          {{ copy.success.title }}
+        </h1>
+        <p class="mt-3 text-base leading-6 text-nexo-body">
+          Tudo certo, {{ firstName }}. {{ copy.success.messageSuffix }}
+        </p>
+        <div
+          class="mx-auto mt-4 inline-flex items-center gap-1.5 rounded-full bg-nexo-success-bg px-3 py-1.5 text-sm font-semibold text-nexo-success-strong"
+          role="status"
+        >
+          <ng-icon name="phosphorCheckBold" size="16" class="h-4 w-4" aria-hidden="true" />
+          {{ copy.success.active }}
+        </div>
+
+        <app-payment-result-details
+          class="mt-8 block"
+          [product]="payment.product"
+          [orderId]="order()?.id ?? payment.id"
+          [method]="payment.method"
+          [amount]="payment.amount"
+          [cardBrand]="payment.cardBrand"
+          [cardLastFour]="payment.cardLastFour"
+          [createdAt]="payment.createdAt"
+          [showDate]="true"
+        />
+
+        <div class="mt-7 text-center">
+          <p class="text-sm text-nexo-muted">{{ copy.success.receiptSent }}</p>
+          <p class="mt-1 text-base font-semibold text-nexo-heading-soft">{{ receiptEmail }}</p>
+        </div>
+
+        <div class="receipt-actions mt-8 flex flex-col gap-3 sm:flex-row">
+          <button
+            class="primary-button flex flex-1 items-center justify-center gap-2"
+            type="button"
+            (click)="accessWorkspace()"
+          >
+            <ng-icon name="phosphorArrowRightBold" size="20" class="h-5 w-5" aria-hidden="true" />
+            {{ copy.success.access }}
+          </button>
+          <button
+            class="secondary-button flex flex-1 items-center justify-center gap-2 bg-white"
+            type="button"
+            (click)="printReceipt()"
+          >
+            <span class="text-nexo-primary">
+              <ng-icon name="phosphorReceiptBold" size="20" class="h-5 w-5" aria-hidden="true" />
+            </span>
+            {{ copy.success.receipt }}
+          </button>
+        </div>
+        <div class="receipt-print-footer">{{ copy.success.documentFooter }}</div>
+      </section>
+
+      <section class="print-receipt" [attr.aria-label]="copy.success.receiptTitle">
+        <div class="print-receipt-heading">
+          <img src="/logo.svg" [alt]="copy.brand.ariaLabel" />
+          <div>
+            <strong>{{ copy.steps.payment }}</strong>
+            <span>{{ payment.product.name }}</span>
+          </div>
+        </div>
+        <div class="print-receipt-rule"></div>
+        <dl>
+          <div>
+            <dt>{{ copy.result.order }}</dt>
+            <dd>{{ payment.id }}</dd>
+          </div>
+          <div>
+            <dt>{{ copy.result.payment }}</dt>
+            <dd>
+              @if (payment.cardLastFour) {
+                {{ methodLabel(payment.method) }} - {{ payment.cardBrand }} -
+                &bull;&bull;&bull;&bull;
+                {{ payment.cardLastFour }}
+              } @else {
+                {{ methodLabel(payment.method) }}
+              }
+            </dd>
+          </div>
+          <div>
+            <dt>{{ copy.result.date }}</dt>
+            <dd>{{ payment.createdAt | date: 'dd/MM/yyyy, HH:mm' }}</dd>
+          </div>
+          <div class="print-receipt-total">
+            <dt>{{ copy.result.amount }}</dt>
+            <dd>{{ payment.amount | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</dd>
+          </div>
+        </dl>
+      </section>
+    }
+  </main>
+</app-payment-status-shell>
